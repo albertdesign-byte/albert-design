@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Container } from "@/components/layout/Container";
 import { FooterMeta } from "@/components/sections/FooterMeta";
 import { footer } from "@/content/footer";
@@ -15,7 +17,7 @@ export function FooterCta() {
       id="footer-cta"
       className="rounded-panel bg-footer text-footer-foreground"
     >
-      <Container className="flex min-h-[640px] flex-col md:min-h-[730px] md:max-w-[1340px] md:py-[99px]">
+      <Container className="flex min-h-[560px] flex-col md:min-h-[640px] lg:min-h-[730px] lg:max-w-[1340px] lg:py-[99px]">
         <FooterMeta className="shrink-0 pt-space-12 md:pt-0" />
 
         <div className="flex flex-1 flex-col items-center justify-center gap-5 py-space-24 md:py-0">
@@ -26,12 +28,12 @@ export function FooterCta() {
             {footer.prompt}
           </p>
 
-          <a
+          <Link
             href={footer.cta.href}
-            className="font-sans text-cta leading-none text-footer-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-footer-foreground/40 focus-visible:ring-offset-2 focus-visible:ring-offset-footer"
+            className="font-sans text-[clamp(1.75rem,6vw,3.5rem)] leading-none text-footer-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-footer-foreground/40 focus-visible:ring-offset-2 focus-visible:ring-offset-footer lg:text-cta"
           >
             {footer.cta.label}
-          </a>
+          </Link>
         </div>
       </Container>
     </section>

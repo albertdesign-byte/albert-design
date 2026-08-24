@@ -8,22 +8,24 @@ type SiteHeaderProps = {
 };
 
 /**
- * Top chrome: brand · centered nav pill · social.
+ * Top chrome: brand · social. NavPill is position:fixed and docks to the
+ * bottom of the homepage hero on mobile, then pins to the top after scroll
+ * (see components/ui/NavPill.tsx).
  * Server wrapper; NavPill is the only client island.
  */
 export function SiteHeader({ className }: SiteHeaderProps) {
   return (
     <header
       className={cn(
-        "grid grid-cols-3 items-center px-space-6 py-space-6 md:px-space-12",
+        "grid grid-cols-2 items-center px-space-6 py-space-6 md:grid-cols-3 md:px-space-8 lg:px-space-12",
         className,
       )}
     >
       <BrandMark className="justify-self-start" />
 
-      <NavPill className="col-span-3 row-start-2 mt-space-3 justify-self-center md:col-span-1 md:col-start-2 md:row-start-1 md:mt-0" />
+      <NavPill />
 
-      <SocialLinks className="col-start-3 row-start-1 justify-self-end" />
+      <SocialLinks className="justify-self-end md:col-start-3 md:row-start-1" />
     </header>
   );
 }

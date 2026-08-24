@@ -1,8 +1,8 @@
 export const navItems = [
-  { label: "Home", href: "/" },
-  { label: "Case Studies", href: "/#case-studies" },
-  { label: "About", href: "/#about" },
-  { label: "Contacts", href: "/#contact" },
+  { label: "Inicio", href: "/" },
+  { label: "Proyectos", href: "/#case-studies" },
+  { label: "Nosotros", href: "/#about" },
+  { label: "Contacto", href: "/#contact" },
 ] as const;
 
 export type NavItem = (typeof navItems)[number];

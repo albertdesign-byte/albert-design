@@ -11,11 +11,11 @@ import { ManifestoText } from "@/components/sections/ManifestoText";
 export function ClientsSection() {
   return (
     <Section id="about" className="bg-panel">
-      <Container className="flex min-h-[516px] items-center py-space-24 md:py-[115px]">
-        <div className="mx-auto flex w-full max-w-[1188px] flex-col gap-space-12 md:flex-row md:items-start md:gap-0">
-          <ClientNameList className="shrink-0 md:w-[325px] md:pt-space-6" />
+      <Container className="flex min-h-[516px] items-center py-space-24 md:py-space-24 lg:py-[115px]">
+        <div className="mx-auto flex w-full max-w-[1188px] flex-col gap-space-12 lg:flex-row lg:items-start lg:gap-0">
+          <ClientNameList className="shrink-0 lg:w-[325px] lg:pt-space-6" />
 
-          <div className="flex min-w-0 flex-1 flex-col gap-space-10 md:max-w-[863px] md:gap-10">
+          <div className="flex min-w-0 flex-1 flex-col gap-space-10 lg:max-w-[863px] lg:gap-10">
             <ManifestoText className="w-full leading-[1.48]" />
             <LogoCloud />
           </div>

@@ -4,6 +4,6 @@ export const footer = {
   prompt: "¿Tienes algún proyecto?",
   cta: {
     label: "Envía un saludo",
-    href: "/#contact",
+    href: "/contacto",
   },
 } as const;

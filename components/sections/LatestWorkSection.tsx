@@ -10,13 +10,13 @@ import { latestWork } from "@/content/latest-work";
 export function LatestWorkSection() {
   return (
     <Section id="latest-work" className="bg-panel">
-      <Container className="py-space-24 md:py-[111px]">
-        <div className="mx-auto flex w-full max-w-[1225px] flex-col gap-space-12 md:flex-row md:items-start md:gap-0">
-          <h2 className="shrink-0 font-display text-section text-foreground md:w-[320px]">
+      <Container className="py-space-24 md:py-space-24 lg:py-[111px]">
+        <div className="mx-auto flex w-full max-w-[1225px] flex-col gap-space-12 lg:flex-row lg:items-start lg:gap-0">
+          <h2 className="shrink-0 font-display text-section text-foreground lg:w-[320px]">
             {latestWork.title}
           </h2>
 
-          <WorkList className="md:ml-auto md:w-[752px]" />
+          <WorkList className="lg:ml-auto lg:w-[752px]" />
         </div>
       </Container>
     </Section>

@@ -22,6 +22,7 @@ export function CaseStudyBand({
           surface={band.surface}
           image={band.image}
           priority={priority}
+          comingSoon={band.comingSoon}
           sizes="(min-width: 1440px) 1424px, 100vw"
         />
       </div>
@@ -31,8 +32,8 @@ export function CaseStudyBand({
   // Figma: Frame 121 = 545|871; Frame 122 = 871|545; gap 8
   const gridCols =
     band.splitRatio === "wide-narrow"
-      ? "md:grid-cols-[871fr_545fr]"
-      : "md:grid-cols-[545fr_871fr]";
+      ? "lg:grid-cols-[871fr_545fr]"
+      : "lg:grid-cols-[545fr_871fr]";
 
   const leftSizes =
     band.splitRatio === "wide-narrow"
@@ -52,6 +53,7 @@ export function CaseStudyBand({
         surface={band.left.surface}
         image={band.left.image}
         priority={priority}
+        comingSoon={band.comingSoon}
         fill
         sizes={leftSizes}
       />
@@ -61,6 +63,7 @@ export function CaseStudyBand({
         surface={band.right.surface}
         image={band.right.image}
         priority={priority}
+        comingSoon={band.comingSoon}
         fill
         sizes={rightSizes}
       />

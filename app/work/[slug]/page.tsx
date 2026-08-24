@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
@@ -10,6 +9,19 @@ import { portfolioBands } from "@/content/projects";
 
 function findProject(slug: string) {
   return portfolioBands.find((band) => band.slug === slug);
+}
+
+/**
+ * Turns an arbitrary slug (e.g. a "next project" teaser link that doesn't
+ * have a portfolioBands entry yet, like /work/lapzo) into a display name,
+ * so this page never has to notFound() a project we just haven't built out.
+ */
+function humanizeSlug(slug: string): string {
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 export async function generateStaticParams() {
@@ -22,20 +34,22 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = findProject(slug);
 
-  return { title: project ? project.name : "Case study" };
+  return { title: project?.name ?? humanizeSlug(slug) };
 }
 
 /**
  * Placeholder case study page — keeps Portfolio links from 404ing while
  * the full case study templates are built (see docs/review-v1.md #2).
+ * Unknown slugs (not yet in content/projects.ts) still render this same
+ * "coming soon" placeholder instead of a hard 404, e.g. the "Lapzo" next
+ * project teaser on the Gokei page (see components/sections/NextProjectLink).
  */
 export default async function WorkPage({
   params,
 }: PageProps<"/work/[slug]">) {
   const { slug } = await params;
   const project = findProject(slug);
-
-  if (!project) notFound();
+  const name = project?.name ?? humanizeSlug(slug);
 
   return (
     <SiteShell>
@@ -47,7 +61,7 @@ export default async function WorkPage({
             Case study
           </p>
           <h1 className="font-display text-section text-foreground">
-            {project.name}
+            {name}
           </h1>
           <p className="max-w-[40ch] font-sans text-[1rem] leading-[1.6] text-muted-foreground">
             Estamos preparando el detalle de este proyecto. Vuelve pronto.

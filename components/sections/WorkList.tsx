@@ -14,6 +14,7 @@ export function WorkList({ className }: WorkListProps) {
           key={project.name}
           name={project.name}
           year={project.year}
+          url={"url" in project ? project.url : undefined}
         />
       ))}
     </ul>

@@ -5,20 +5,26 @@ import { HeroHeadline } from "@/components/sections/HeroHeadline";
 
 /**
  * Hero: header + asymmetric bio (left) + display headline (bottom-right).
- * Presence ~900–950px desktop — air inside the panel is intentional.
+ * Locked to one viewport (`100dvh` minus the 8px shell inset) on every
+ * breakpoint, so the first screen is always fully visible — type and the
+ * bio/headline pair reflow inside that frame instead of growing the panel.
+ *
+ * Desktop composition: a 1fr + auto grid so bio and headline share the
+ * same top edge (Figma) while sitting on the bottom of whatever height
+ * the current display has, instead of the old 942px-only offsets.
  */
 export function HeroSection() {
   return (
     <Section
       id="hero"
-      className="relative flex min-h-[min(100svh,56rem)] flex-col md:min-h-[942px]"
+      className="relative flex h-[calc(100dvh-1rem)] flex-col overflow-hidden"
     >
       <SiteHeader />
 
-      <div className="relative flex flex-1 flex-col px-space-6 pb-space-12 pt-space-16 md:px-10 md:pb-12 md:pt-0">
-        <HeroBio className="md:absolute md:top-[107px] md:left-10" />
+      <div className="relative flex min-h-0 flex-1 flex-col px-space-6 pb-24 pt-space-8 md:px-space-8 md:pb-16 md:pt-space-12 lg:grid lg:grid-cols-2 lg:grid-rows-[1fr_auto] lg:px-10 lg:pb-12 lg:pt-0">
+        <HeroBio className="lg:col-start-1 lg:row-start-2 lg:self-start" />
 
-        <HeroHeadline className="mt-auto pt-space-24 md:absolute md:right-10 md:bottom-12 md:mt-0 md:pt-0" />
+        <HeroHeadline className="mt-auto pt-space-8 md:pt-space-12 lg:col-start-2 lg:row-start-2 lg:mt-0 lg:justify-self-end lg:pt-0" />
       </div>
     </Section>
   );

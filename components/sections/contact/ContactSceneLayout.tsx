@@ -26,26 +26,26 @@ export function ContactSceneLayout({
   return (
     <div
       className={cn(
-        "mx-auto flex w-full max-w-[1239px] flex-col items-start gap-space-10 px-space-6 md:flex-row md:items-center md:justify-center md:gap-[104px] md:px-0",
+        "mx-auto flex w-full max-w-[1239px] flex-col items-start gap-space-10 px-space-6 md:items-center md:px-space-8 lg:flex-row lg:items-center lg:justify-center lg:gap-[104px] lg:px-0",
         className,
       )}
     >
       <h2
         className={cn(
-          "shrink-0 font-display text-[1.75rem] leading-[1.48] md:w-[180px]",
+          "shrink-0 font-display text-[1.75rem] leading-[1.48] lg:w-[180px]",
           copy,
         )}
       >
         {label}
       </h2>
 
-      <div className="relative h-auto w-full max-w-[529px] shrink-0 overflow-hidden rounded-[24px] md:h-[353px] md:w-[529px]">
+      <div className="relative h-auto w-full max-w-[529px] shrink-0 overflow-hidden rounded-[24px] lg:h-[353px] lg:w-[529px]">
         {visual}
       </div>
 
       <p
         className={cn(
-          "shrink-0 font-chrome text-[1.125rem] leading-[1.48] md:w-[322px] md:text-[1.25rem]",
+          "shrink-0 font-chrome text-[1.125rem] leading-[1.48] md:text-[1.25rem] lg:w-[322px]",
           copy,
         )}
       >
