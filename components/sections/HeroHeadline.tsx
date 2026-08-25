@@ -1,11 +1,14 @@
+import type { ReactNode } from "react";
+
 import { hero } from "@/content/hero";
 import { cn } from "@/lib/cn";
 
 type HeroHeadlineProps = {
+  children?: ReactNode;
   className?: string;
 };
 
-export function HeroHeadline({ className }: HeroHeadlineProps) {
+export function HeroHeadline({ children, className }: HeroHeadlineProps) {
   return (
     <h1
       className={cn(
@@ -18,7 +21,7 @@ export function HeroHeadline({ className }: HeroHeadlineProps) {
         className,
       )}
     >
-      {hero.headline}
+      {children ?? hero.headline}
     </h1>
   );
 }

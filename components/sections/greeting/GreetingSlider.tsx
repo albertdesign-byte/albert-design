@@ -58,24 +58,30 @@ export function GreetingSlider({
         />
       ))}
 
-      <div className="absolute inset-x-0 bottom-6 z-10 flex items-center justify-center gap-2">
-        {slides.map((item, itemIndex) => (
-          <button
-            key={item.id}
-            type="button"
-            aria-label={`Ir a la imagen ${itemIndex + 1}`}
-            aria-current={itemIndex === index}
-            onClick={() => setIndex(itemIndex)}
-            className="p-1.5 focus-visible:outline-none"
-          >
-            <span
-              className={cn(
-                "block h-1.5 rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0,0.4)] transition-all duration-300 ease-out",
-                itemIndex === index ? "w-6 opacity-100" : "w-1.5 opacity-50",
-              )}
-            />
-          </button>
-        ))}
+      <div className="absolute inset-x-0 bottom-6 z-10 flex items-center justify-center">
+        <div
+          className="flex items-center gap-0.5 rounded-pill bg-white/55 px-2 py-1 shadow-[0_4px_24px_rgba(0,0,0,0.12)] ring-1 ring-white/50 backdrop-blur-xl backdrop-saturate-150"
+          role="group"
+          aria-label="Imágenes del slider"
+        >
+          {slides.map((item, itemIndex) => (
+            <button
+              key={item.id}
+              type="button"
+              aria-label={`Ir a la imagen ${itemIndex + 1}`}
+              aria-current={itemIndex === index}
+              onClick={() => setIndex(itemIndex)}
+              className="p-1.5 focus-visible:outline-none"
+            >
+              <span
+                className={cn(
+                  "block h-1.5 rounded-full bg-foreground transition-all duration-300 ease-out",
+                  itemIndex === index ? "w-6 opacity-100" : "w-1.5 opacity-35",
+                )}
+              />
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

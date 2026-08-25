@@ -10,10 +10,10 @@ import { cn } from "@/lib/cn";
  * border, the field's only visual cue that it's the active one.
  */
 const fieldClassName =
-  "peer w-full rounded-[12px] border border-transparent bg-white px-4 font-sans text-[18px] text-foreground transition-colors duration-200 ease-out focus:border-foreground/20 focus:outline-none";
+  "peer w-full rounded-[12px] border border-transparent bg-white px-4 font-sans text-[16px] text-foreground transition-colors duration-200 ease-out focus:border-foreground/20 focus:outline-none";
 
 const labelClassName =
-  "pointer-events-none absolute left-4 font-sans text-[18px] text-foreground/90 transition-all duration-200 ease-out";
+  "pointer-events-none absolute left-4 font-sans text-[16px] text-muted-foreground transition-all duration-200 ease-out";
 
 type FloatingLabelInputProps = {
   id: string;
@@ -67,7 +67,10 @@ export function FloatingLabelTextarea({
       <textarea
         id={id}
         placeholder=" "
-        className={cn(fieldClassName, "h-[210px] resize-none pb-2 pt-7")}
+        className={cn(
+          fieldClassName,
+          "h-[210px] min-h-0 resize-none pb-2 pt-7 lg:h-auto lg:min-h-0 lg:flex-1",
+        )}
         {...textareaProps}
       />
       <label

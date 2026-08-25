@@ -1,7 +1,16 @@
+import type { ReactNode } from "react";
+
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Section } from "@/components/layout/Section";
 import { HeroBio } from "@/components/sections/HeroBio";
 import { HeroHeadline } from "@/components/sections/HeroHeadline";
+import { hero } from "@/content/hero";
+
+type HeroSectionProps = {
+  bio?: string | null;
+  headline?: string;
+  eyebrow?: ReactNode;
+};
 
 /**
  * Hero: header + asymmetric bio (left) + display headline (bottom-right).
@@ -13,7 +22,11 @@ import { HeroHeadline } from "@/components/sections/HeroHeadline";
  * same top edge (Figma) while sitting on the bottom of whatever height
  * the current display has, instead of the old 942px-only offsets.
  */
-export function HeroSection() {
+export function HeroSection({
+  bio = hero.bio,
+  headline = hero.headline,
+  eyebrow,
+}: HeroSectionProps) {
   return (
     <Section
       id="hero"
@@ -22,9 +35,16 @@ export function HeroSection() {
       <SiteHeader />
 
       <div className="relative flex min-h-0 flex-1 flex-col px-space-6 pb-24 pt-space-8 md:px-space-8 md:pb-16 md:pt-space-12 lg:grid lg:grid-cols-2 lg:grid-rows-[1fr_auto] lg:px-10 lg:pb-12 lg:pt-0">
-        <HeroBio className="lg:col-start-1 lg:row-start-2 lg:self-start" />
+        {bio ? (
+          <HeroBio className="lg:col-start-1 lg:row-start-2 lg:self-start">
+            {bio}
+          </HeroBio>
+        ) : null}
 
-        <HeroHeadline className="mt-auto pt-space-8 md:pt-space-12 lg:col-start-2 lg:row-start-2 lg:mt-0 lg:justify-self-end lg:pt-0" />
+        <div className="mt-auto flex flex-col items-start pt-space-8 md:pt-space-12 lg:col-start-2 lg:row-start-2 lg:mt-0 lg:justify-self-end lg:pt-0">
+          {eyebrow}
+          <HeroHeadline>{headline}</HeroHeadline>
+        </div>
       </div>
     </Section>
   );

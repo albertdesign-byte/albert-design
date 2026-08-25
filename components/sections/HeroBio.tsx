@@ -1,11 +1,14 @@
+import type { ReactNode } from "react";
+
 import { hero } from "@/content/hero";
 import { cn } from "@/lib/cn";
 
 type HeroBioProps = {
+  children?: ReactNode;
   className?: string;
 };
 
-export function HeroBio({ className }: HeroBioProps) {
+export function HeroBio({ children, className }: HeroBioProps) {
   return (
     <p
       className={cn(
@@ -13,7 +16,7 @@ export function HeroBio({ className }: HeroBioProps) {
         className,
       )}
     >
-      {hero.bio}
+      {children ?? hero.bio}
     </p>
   );
 }

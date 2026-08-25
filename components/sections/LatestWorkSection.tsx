@@ -9,7 +9,7 @@ import { latestWork } from "@/content/latest-work";
  */
 export function LatestWorkSection() {
   return (
-    <Section id="latest-work" className="bg-panel">
+    <Section id="latest-work" className="relative overflow-hidden bg-panel">
       <Container className="py-space-24 md:py-space-24 lg:py-[111px]">
         <div className="mx-auto flex w-full max-w-[1225px] flex-col gap-space-12 lg:flex-row lg:items-start lg:gap-0">
           <h2 className="shrink-0 font-display text-section text-foreground lg:w-[320px]">

@@ -7,20 +7,28 @@ type BrandMarkProps = {
   className?: string;
 };
 
+/** Wordmark + tagline (Figma 108:1352). */
 export function BrandMark({ className }: BrandMarkProps) {
   return (
     <Link
       href="/"
+      aria-label={site.name}
       className={cn(
-        "font-chrome focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25",
+        "block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25",
         className,
       )}
     >
-      <span className="block text-[14px] font-semibold leading-none tracking-tight text-foreground">
-        {site.name}
+      <span className="relative block h-5 w-[118px] overflow-clip">
+        <img
+          src="/images/nav/albeeert.svg"
+          alt={site.name}
+          width={118}
+          height={20}
+          className="size-full"
+        />
       </span>
-      <span className="mt-px block text-[12px] leading-[18px] text-label">
-        {site.tagline}
+      <span className="mt-px block font-chrome text-[12px] leading-[18px] text-label">
+        Wordwide
       </span>
     </Link>
   );

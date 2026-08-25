@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
-import { navItems } from "@/content/navigation";
+import { ServicesMegaMenu } from "@/components/ui/ServicesMegaMenu";
+import { navCtas, navItems, servicesMenu } from "@/content/navigation";
 import { cn } from "@/lib/cn";
 
 type NavPillProps = {
@@ -30,9 +31,6 @@ const SECTION_IDS = navItems
   .map((item) => sectionIdFromHref(item.href))
   .filter((id): id is string => id !== null);
 
-/** Past this scroll offset the glass panel fades in behind the nav links. */
-const GLASS_SCROLL_THRESHOLD = 8;
-
 /** A section becomes "active" once its top scrolls above this line — just
  *  below the fixed pill, so the highlight flips right as a section's
  *  content starts appearing under the nav. */
@@ -42,23 +40,10 @@ const ACTIVE_SECTION_LINE_PX = 160;
  *  has scrolled up to this line. */
 const MOBILE_PIN_LINE_PX = 80;
 
-function useIsScrolled(threshold: number): boolean {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const update = () => setScrolled(window.scrollY > threshold);
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
-  }, [threshold]);
-
-  return scrolled;
-}
-
 /**
  * True after the homepage hero has scrolled far enough that a bottom-docked
  * pill would have passed the top of the screen — then it pins up there.
- * Inner routes have no full-viewport hero, so they start pinned.
+ * Inner routes without a full-viewport `#hero` start pinned.
  */
 function usePastHero(enabled: boolean): boolean {
   const [pastHero, setPastHero] = useState(false);
@@ -123,55 +108,212 @@ function useActiveSectionId(sectionIds: readonly string[]): string | null {
   return activeId;
 }
 
+/** True when hover is a real pointing device — not a touch screen that
+ *  synthesizes mouseenter after a tap (which would fight tap-to-toggle). */
+function useHoverOpen(): boolean {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const sync = () => setEnabled(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
+  return enabled;
+}
+
 export function NavPill({ className }: NavPillProps) {
   const pathname = usePathname();
-  const isHome = pathname === "/";
-  const scrolled = useIsScrolled(GLASS_SCROLL_THRESHOLD);
-  const pastHero = usePastHero(isHome);
+  const hasViewportHero = pathname === "/" || pathname === "/precio";
+  const pastHero = usePastHero(hasViewportHero);
   const activeSectionId = useActiveSectionId(SECTION_IDS);
-  const dockAtBottom = isHome && !pastHero;
+  const dockAtBottom = hasViewportHero && !pastHero;
+  const hoverOpen = useHoverOpen();
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [servicesPathname, setServicesPathname] = useState(pathname);
+  const menuId = "services-mega-menu";
+  const closeTimer = useRef<number>(0);
+
+  if (pathname !== servicesPathname) {
+    setServicesPathname(pathname);
+    setServicesOpen(false);
+  }
+
+  const openServices = () => {
+    window.clearTimeout(closeTimer.current);
+    setServicesOpen(true);
+  };
+
+  const closeServices = () => {
+    window.clearTimeout(closeTimer.current);
+    setServicesOpen(false);
+  };
+
+  const scheduleCloseServices = () => {
+    window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => setServicesOpen(false), 160);
+  };
+
+  const onServicesHoverEnter = hoverOpen ? openServices : undefined;
+  const onServicesHoverLeave = hoverOpen ? scheduleCloseServices : undefined;
+
+  useEffect(() => {
+    if (!servicesOpen) return;
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setServicesOpen(false);
+    };
+    const onPointer = (event: PointerEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+      if (!document.getElementById(menuId)?.contains(target)) {
+        const trigger = document.getElementById(`${menuId}-trigger`);
+        if (!trigger?.contains(target)) setServicesOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("pointerdown", onPointer);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("pointerdown", onPointer);
+    };
+  }, [servicesOpen, menuId]);
+
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
+
+  const linkClass = (active: boolean) =>
+    cn(
+      "inline-flex h-10 shrink-0 items-center whitespace-nowrap rounded-full px-1 font-sans text-[11px] leading-[12px] transition-colors md:px-2.5 md:text-[12px] min-[1440px]:px-4",
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25 focus-visible:ring-offset-2",
+      active ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-white/60",
+    );
 
   return (
     <nav
       aria-label="Primary"
       data-dock={dockAtBottom ? "bottom" : "top"}
       className={cn(
-        "fixed top-0 left-1/2 z-50",
-        "-translate-x-1/2 translate-y-4 md:translate-y-5 lg:translate-y-6",
-        "max-md:data-[dock=bottom]:translate-y-[calc(100dvh-100%-max(1rem,env(safe-area-inset-bottom)))]",
-        "flex items-center rounded-pill p-1 shadow-lg ring-1",
-        "transition-[transform,background-color,backdrop-filter,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
-        scrolled
-          ? "bg-white/70 shadow-black/[0.08] ring-black/5 backdrop-blur-xl backdrop-saturate-150"
-          : "bg-transparent shadow-transparent ring-transparent",
+        "group/nav z-50",
+        // No translate on mobile: a transform on this node would make the
+        // mega-menu's `fixed` inset relative to the pill, not the viewport.
+        "max-md:fixed max-md:inset-x-0 max-md:top-4 max-md:z-50 max-md:flex max-md:justify-center",
+        "max-md:data-[dock=bottom]:top-auto max-md:data-[dock=bottom]:bottom-[max(1rem,env(safe-area-inset-bottom))]",
+        "md:relative",
         className,
       )}
     >
-      {navItems.map((item) => {
-        // On the homepage, scroll position drives the highlight; on any
-        // other route (e.g. /work/gokei), fall back to the path match.
-        const active =
-          pathname === "/"
-            ? activeSectionId === sectionIdFromHref(item.href)
-            : isActive(pathname, item.href);
+      {servicesOpen ? (
+        <ServicesMegaMenu
+          id={menuId}
+          onMouseEnter={onServicesHoverEnter}
+          onMouseLeave={onServicesHoverLeave}
+        />
+      ) : null}
+      <div
+        onMouseLeave={onServicesHoverLeave}
+        className={cn(
+          "relative z-10 flex max-md:max-w-[calc(100%-2rem)] items-center gap-0 overflow-visible rounded-full bg-white/50 p-1 backdrop-blur-[6px] md:gap-3 min-[1440px]:gap-6",
+        )}
+      >
+        <div className="flex items-center overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:overflow-visible">
+          {navItems.map((item, index) => {
+            const active =
+              pathname === "/"
+                ? activeSectionId === sectionIdFromHref(item.href)
+                : isActive(pathname, item.href);
 
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            aria-current={active ? "page" : undefined}
-            className={cn(
-              "rounded-pill px-2.5 py-2.5 font-chrome text-[11px] leading-none transition-colors md:px-3 md:text-[12px] lg:px-4 lg:py-3",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25 focus-visible:ring-offset-2",
-              active
-                ? "bg-footer text-footer-foreground"
-                : "text-foreground hover:bg-muted",
-            )}
-          >
-            {item.label}
-          </Link>
-        );
-      })}
+            return (
+              <Fragment key={item.href}>
+                {index === 1 ? (
+                  <button
+                    id={`${menuId}-trigger`}
+                    type="button"
+                    aria-expanded={servicesOpen}
+                    aria-controls={menuId}
+                    aria-haspopup="menu"
+                    onMouseEnter={onServicesHoverEnter}
+                    onClick={() => {
+                      window.clearTimeout(closeTimer.current);
+                      if (hoverOpen) {
+                        setServicesOpen(true);
+                        return;
+                      }
+                      setServicesOpen((open) => !open);
+                    }}
+                    className={cn(
+                      "relative z-10 inline-flex h-10 shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-1 font-sans text-[11px] leading-[12px] transition-colors md:px-2.5 md:text-[12px] min-[1440px]:px-4",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25 focus-visible:ring-offset-2",
+                      servicesOpen
+                        ? "bg-primary text-primary-foreground"
+                        : "text-foreground hover:bg-white/60",
+                    )}
+                  >
+                    {servicesMenu.label}
+                    <span className="relative size-3.5 shrink-0 overflow-clip md:size-4">
+                      <img
+                        src="/images/nav/chevron.svg"
+                        alt=""
+                        width={16}
+                        height={16}
+                        className={cn(
+                          "size-full",
+                          servicesOpen && "brightness-0 invert",
+                        )}
+                      />
+                    </span>
+                  </button>
+                ) : null}
+                <Link
+                  href={item.href}
+                  aria-current={active && !servicesOpen ? "page" : undefined}
+                  onMouseEnter={hoverOpen ? closeServices : undefined}
+                  className={linkClass(active && !servicesOpen)}
+                >
+                  {item.label}
+                </Link>
+              </Fragment>
+            );
+          })}
+        </div>
+
+        <div className="hidden items-center gap-2 lg:flex min-[1440px]:gap-4">
+          {navCtas.map((cta) => (
+            <Link
+              key={cta.label}
+              href={cta.href}
+              {...(cta.href.startsWith("http")
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
+              onMouseEnter={hoverOpen ? closeServices : undefined}
+              className={cn(
+                "inline-flex h-10 shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 font-sans text-[12px] leading-6 transition-opacity hover:opacity-90 min-[1440px]:px-6",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25 focus-visible:ring-offset-2",
+                cta.variant === "primary"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-[#f0f0f0] text-[#020507]",
+              )}
+            >
+              {cta.label}
+              <span className="relative size-5 shrink-0 overflow-clip">
+                <img
+                  src={
+                    cta.icon === "calendar"
+                      ? "/images/nav/calendar.svg"
+                      : "/images/nav/chat.svg"
+                  }
+                  alt=""
+                  width={20}
+                  height={20}
+                  className="size-full"
+                />
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
     </nav>
   );
 }

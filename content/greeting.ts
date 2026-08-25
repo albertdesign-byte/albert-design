@@ -1,3 +1,5 @@
+import { servicesMenu } from "@/content/navigation";
+
 /**
  * "Envía un saludo" — contact request screen (Figma 72:13968 "Formulario").
  * Reached from the footer CTA (content/footer.ts → cta.href).
@@ -6,22 +8,52 @@
 export const greeting = {
   eyebrow: "Wordwide",
   heading: "Amamos crear\nproyectos",
+  description: "Los mejores diseñadores y builders de LATAM",
   form: {
     fields: {
-      phone: { name: "phone", label: "Número de contacto", type: "tel" },
+      phone: {
+        name: "phone",
+        countryName: "country",
+        label: "Número de contacto",
+        prefixLabel: "Pre-fijo",
+        type: "tel",
+      },
       name: { name: "name", label: "Nombre", type: "text" },
       company: { name: "company", label: "Empresa", type: "text" },
       email: { name: "email", label: "Email", type: "email" },
+      service: {
+        name: "service",
+        label: "Servicio",
+        options: servicesMenu.columns.flatMap((column) =>
+          column.items.map((item) => ({
+            value: item.icon,
+            label: item.title,
+          })),
+        ),
+      },
+      budget: {
+        name: "budget",
+        label: "Presupuesto del proyecto",
+        options: [
+          { value: "1000-3000", label: "$1000 USD - $3000 USD" },
+          { value: "4000-8000", label: "$4000 USD - $8000 USD" },
+          { value: "8000+", label: "Mayor de $8000 USD" },
+        ],
+      },
       message: { name: "message", label: "Mensaje" },
     },
     privacy: {
       prefix: "Acepto el amigable ",
-      linkLabel: "tratado de privacidad",
-      href: "/privacidad",
+      linkLabel: "Política de Privacidad",
+      href: "/privacy",
     },
     submitLabel: "Enviar",
+    submittingLabel: "Enviando…",
     successMessage:
       "¡Gracias! Recibimos tu saludo — te contestaremos muy pronto.",
+    errorMessage:
+      "No pudimos enviar tu saludo. Inténtalo de nuevo en un momento.",
+    invalidMessage: "Revisa los campos e inténtalo de nuevo.",
   },
   /**
    * Slide images (Figma 72:13968, "Hero" .. "Hero-6"), re-exported with the

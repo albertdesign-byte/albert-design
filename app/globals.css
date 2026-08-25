@@ -15,8 +15,10 @@
   /* #6b6c6f — darkened from #9fa0a3 for the same reason (small labels
      on light surfaces, e.g. BrandMark tagline). */
   --label: #6b6c6f;
-  --footer: #23120b;
-  --footer-foreground: #ffffff;
+  --primary: #23120b;
+  --primary-foreground: #ffffff;
+  --footer: var(--primary);
+  --footer-foreground: var(--primary-foreground);
   --nav-track: #f5f5f5;
   --nav-active: #131417;
   --nav-active-foreground: #ffffff;
@@ -58,6 +60,8 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-panel: var(--panel);
   --color-label: var(--label);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
   --color-footer: var(--footer);
   --color-footer-foreground: var(--footer-foreground);
   --color-nav-track: var(--nav-track);

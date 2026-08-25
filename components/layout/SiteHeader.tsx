@@ -1,6 +1,6 @@
 import { BrandMark } from "@/components/brand/BrandMark";
+import { MobileNav } from "@/components/ui/MobileNav";
 import { NavPill } from "@/components/ui/NavPill";
-import { SocialLinks } from "@/components/ui/SocialLinks";
 import { cn } from "@/lib/cn";
 
 type SiteHeaderProps = {
@@ -8,24 +8,27 @@ type SiteHeaderProps = {
 };
 
 /**
- * Top chrome: brand · social. NavPill is position:fixed and docks to the
- * bottom of the homepage hero on mobile, then pins to the top after scroll
- * (see components/ui/NavPill.tsx).
- * Server wrapper; NavPill is the only client island.
+ * Top chrome: wordmark + glass nav (Figma 108:1350 desktop,
+ * 114:1947 Menu-1/2/3 on mobile and tablet).
+ *
+ * Desktop (lg+): fixed wordmark + pill. Mobile/tablet: logo+hamburger
+ * pill and a sticky WhatsApp CTA — see MobileNav.
  */
 export function SiteHeader({ className }: SiteHeaderProps) {
   return (
-    <header
-      className={cn(
-        "grid grid-cols-2 items-center px-space-6 py-space-6 md:grid-cols-3 md:px-space-8 lg:px-space-12",
-        className,
-      )}
-    >
-      <BrandMark className="justify-self-start" />
-
-      <NavPill />
-
-      <SocialLinks className="justify-self-end md:col-start-3 md:row-start-1" />
-    </header>
+    <>
+      <div className="hidden h-[104px] shrink-0 lg:block" aria-hidden />
+      <div className="h-[94px] shrink-0 lg:hidden" aria-hidden />
+      <header
+        className={cn(
+          "relative z-50 hidden items-center justify-between lg:fixed lg:inset-x-2 lg:top-2 lg:flex lg:h-[104px] lg:px-10",
+          className,
+        )}
+      >
+        <BrandMark className="relative z-10 shrink-0" />
+        <NavPill />
+      </header>
+      <MobileNav />
+    </>
   );
 }
