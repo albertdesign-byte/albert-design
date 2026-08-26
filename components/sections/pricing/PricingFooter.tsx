@@ -10,7 +10,7 @@ import { pricingFooter } from "@/content/pricing";
 export function PricingFooter() {
   return (
     <section className="overflow-clip rounded-[16px] bg-footer text-footer-foreground lg:h-[730px]">
-      <div className="mx-auto flex h-full w-full max-w-[1340px] flex-col px-space-6 py-space-12 md:px-space-8 lg:px-0 lg:py-[99px]">
+      <div className="mx-auto flex h-full w-full max-w-[1340px] flex-col px-space-6 py-space-12 md:px-space-8 lg:px-space-12 lg:py-[99px]">
         <div className="flex w-full items-end justify-between">
           <p className="min-w-0 flex-1 font-chrome text-[11px] leading-[16.5px]">
             {footer.year}

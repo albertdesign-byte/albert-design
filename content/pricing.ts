@@ -9,7 +9,7 @@ export const pricingPlans = [
   {
     name: "Diseñador gráfico",
     description:
-      "¿Necesitas soporte para tus diseños?\nDesde la edición de fotos, hasta banners, ads, impresione, packaging y diseños para correos.",
+      "¿Necesitas soporte para tus diseños?\nDesde la edición de fotos, hasta banners, ads, impresiones, packaging y diseños para correos.",
     price: "$ 1,249 USD",
     period: "/mes",
     primary: { label: "Agendar una meet", href: calendlyUrl },
