@@ -63,6 +63,7 @@ export function NextProjectLink({
   if (disabled || !href) {
     return (
       <div
+        id="next-project"
         aria-disabled="true"
         className={cn("flex flex-col items-end", className)}
       >
@@ -73,6 +74,7 @@ export function NextProjectLink({
 
   return (
     <Link
+      id="next-project"
       href={href}
       className={cn(
         "group flex flex-col items-end focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25 focus-visible:ring-offset-2",

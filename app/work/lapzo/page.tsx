@@ -6,6 +6,7 @@ import { Section } from "@/components/layout/Section";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { FooterCta } from "@/components/sections/FooterCta";
+import { NextProjectBar } from "@/components/sections/NextProjectBar";
 import { NextProjectLink } from "@/components/sections/NextProjectLink";
 import { lapzo } from "@/content/lapzo";
 
@@ -68,6 +69,10 @@ export default function LapzoPage() {
       </Section>
 
       <FooterCta />
+      <NextProjectBar
+        name={lapzo.nextProject.name}
+        href={lapzo.nextProject.href}
+      />
     </SiteShell>
   );
 }

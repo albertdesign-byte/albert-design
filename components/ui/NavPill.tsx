@@ -7,6 +7,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { ServicesMegaMenu } from "@/components/ui/ServicesMegaMenu";
 import { navCtas, navItems, servicesMenu } from "@/content/navigation";
 import { cn } from "@/lib/cn";
+import { useIsScrolled } from "@/lib/scroll/useIsScrolled";
 
 type NavPillProps = {
   className?: string;
@@ -131,6 +132,7 @@ export function NavPill({ className }: NavPillProps) {
   const activeSectionId = useActiveSectionId(SECTION_IDS);
   const dockAtBottom = hasViewportHero && !pastHero;
   const hoverOpen = useHoverOpen();
+  const scrolled = useIsScrolled();
   const [servicesOpen, setServicesOpen] = useState(false);
   const [servicesPathname, setServicesPathname] = useState(pathname);
   const menuId = "services-mega-menu";
@@ -186,7 +188,7 @@ export function NavPill({ className }: NavPillProps) {
 
   const linkClass = (active: boolean) =>
     cn(
-      "inline-flex h-10 shrink-0 items-center whitespace-nowrap rounded-full px-1 font-sans text-[11px] leading-[12px] transition-colors md:px-2.5 md:text-[12px] min-[1440px]:px-4",
+      "inline-flex h-10 shrink-0 items-center whitespace-nowrap rounded-full px-5 font-sans text-[11px] leading-[12px] transition-colors md:text-[12px]",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25 focus-visible:ring-offset-2",
       active ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-white/60",
     );
@@ -214,11 +216,16 @@ export function NavPill({ className }: NavPillProps) {
       ) : null}
       <div
         onMouseLeave={onServicesHoverLeave}
-        className={cn(
-          "relative z-10 flex max-md:max-w-[calc(100%-2rem)] items-center gap-0 overflow-visible rounded-full bg-white/50 p-1 backdrop-blur-[6px] md:gap-3 min-[1440px]:gap-6",
-        )}
+        className="relative z-10 flex max-md:max-w-[calc(100%-2rem)] items-center gap-0 overflow-visible rounded-full p-1 md:gap-3 min-[1440px]:gap-6"
       >
-        <div className="flex items-center overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:overflow-visible">
+        <div
+          aria-hidden
+          className={cn(
+            "pointer-events-none absolute inset-0 rounded-full bg-white/50 backdrop-blur-[6px] transition-opacity duration-300 ease-out motion-reduce:transition-none",
+            scrolled ? "opacity-100" : "opacity-0",
+          )}
+        />
+        <div className="relative z-10 flex items-center overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:overflow-visible">
           {navItems.map((item, index) => {
             const active =
               pathname === "/"
@@ -244,7 +251,7 @@ export function NavPill({ className }: NavPillProps) {
                       setServicesOpen((open) => !open);
                     }}
                     className={cn(
-                      "relative z-10 inline-flex h-10 shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-1 font-sans text-[11px] leading-[12px] transition-colors md:px-2.5 md:text-[12px] min-[1440px]:px-4",
+                      "relative z-10 inline-flex h-10 shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-5 font-sans text-[11px] leading-[12px] transition-colors md:text-[12px]",
                       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25 focus-visible:ring-offset-2",
                       servicesOpen
                         ? "bg-primary text-primary-foreground"
@@ -279,7 +286,7 @@ export function NavPill({ className }: NavPillProps) {
           })}
         </div>
 
-        <div className="hidden items-center gap-2 lg:flex min-[1440px]:gap-4">
+        <div className="relative z-10 hidden items-center gap-2 lg:flex min-[1440px]:gap-4">
           {navCtas.map((cta) => (
             <Link
               key={cta.label}

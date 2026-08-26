@@ -6,6 +6,7 @@ import { Section } from "@/components/layout/Section";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { FooterCta } from "@/components/sections/FooterCta";
+import { NextProjectBar } from "@/components/sections/NextProjectBar";
 import { NextProjectLink } from "@/components/sections/NextProjectLink";
 import { zaraIa } from "@/content/zara-ia";
 
@@ -69,6 +70,10 @@ export default function ZaraIaPage() {
       </Section>
 
       <FooterCta />
+      <NextProjectBar
+        name={zaraIa.nextProject.name}
+        disabled={zaraIa.nextProject.disabled}
+      />
     </SiteShell>
   );
 }

@@ -9,6 +9,8 @@ import { BrandMark } from "@/components/brand/BrandMark";
 import { ServiceIcon } from "@/components/ui/ServiceIcons";
 import { navCtas, navItems, servicesMenu } from "@/content/navigation";
 import { cn } from "@/lib/cn";
+import { useIsScrolled } from "@/lib/scroll/useIsScrolled";
+import { useNextProjectBarVisible } from "@/lib/scroll/useNextProjectBarVisible";
 
 function isActive(pathname: string, href: string): boolean {
   if (href === "/") return pathname === "/";
@@ -68,6 +70,7 @@ export function MobileNav() {
   const pathname = usePathname();
   const dialogId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
+  const scrolled = useIsScrolled();
   const [open, setOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [menuPathname, setMenuPathname] = useState(pathname);
@@ -82,6 +85,7 @@ export function MobileNav() {
   const secondaryCta = navCtas.find((cta) => cta.variant === "secondary") ?? navCtas[0];
   const cotizameHref = navItems.find((item) => item.label === "Cotizame")?.href;
   const onCotizame = cotizameHref ? isActive(pathname, cotizameHref) : false;
+  const nextProjectBarVisible = useNextProjectBarVisible();
 
   useEffect(() => {
     if (!open) return;
@@ -112,14 +116,21 @@ export function MobileNav() {
   return (
     <div className="lg:hidden">
       <div className="pointer-events-none fixed inset-x-0 top-0 z-50 px-6 pt-4">
-        <div className="pointer-events-auto flex h-[62px] items-center justify-between rounded-pill bg-white/50 px-4 py-3 backdrop-blur-[6px]">
-          <BrandMark />
+        <div className="pointer-events-auto relative flex h-[62px] items-center justify-between rounded-pill px-4 py-3">
+          <div
+            aria-hidden
+            className={cn(
+              "pointer-events-none absolute inset-0 rounded-pill bg-white/50 backdrop-blur-[6px] transition-opacity duration-300 ease-out motion-reduce:transition-none",
+              scrolled ? "opacity-100" : "opacity-0",
+            )}
+          />
+          <BrandMark className="relative z-10" />
           <button
             type="button"
             aria-label="Abrir menú"
             aria-expanded={open}
             aria-controls={dialogId}
-            className="relative size-6 shrink-0 overflow-clip focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25"
+            className="relative z-10 size-6 shrink-0 overflow-clip focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25"
             onClick={() => setOpen(true)}
           >
             <img src="/images/nav/menu.svg" alt="" width={24} height={24} className="size-full" />
@@ -127,7 +138,7 @@ export function MobileNav() {
         </div>
       </div>
 
-      {!open && !onCotizame ? (
+      {!open && !onCotizame && !nextProjectBarVisible ? (
         <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 px-6 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
           <div className="pointer-events-auto">
             <CtaButton
