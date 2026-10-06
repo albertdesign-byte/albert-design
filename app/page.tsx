@@ -1,6 +1,5 @@
 import { SiteShell } from "@/components/layout/SiteShell";
 import { ClientsSection } from "@/components/sections/ClientsSection";
-import { ContactSection } from "@/components/sections/ContactSection";
 import { FooterCta } from "@/components/sections/FooterCta";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { LatestWorkSection } from "@/components/sections/LatestWorkSection";
@@ -14,8 +13,6 @@ export default function Home() {
       <PortfolioSection />
 
       <ClientsSection />
-
-      <ContactSection />
 
       <LatestWorkSection />
 

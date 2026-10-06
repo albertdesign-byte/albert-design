@@ -12,6 +12,7 @@ import "./globals.css";
 /* Display — Instrument Serif (docs/design-system.md) */
 const instrumentSerif = Instrument_Serif({
   weight: "400",
+  style: ["normal", "italic"],
   subsets: ["latin", "latin-ext"],
   variable: "--font-display-family",
   display: "swap",

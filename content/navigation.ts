@@ -1,6 +1,5 @@
 export const navItems = [
   { label: "Inicio", href: "/" },
-  { label: "Precio", href: "/precio" },
   { label: "Casos de estudio", href: "/work/gokei" },
   // Hidden for now — restore when the about section is ready.
   // { label: "Nosotros", href: "/#about" },

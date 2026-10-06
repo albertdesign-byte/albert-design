@@ -81,14 +81,6 @@ const oqueaSlides: readonly WorkSlide[] = [
   },
 ];
 
-const bbvaSlides: readonly WorkSlide[] = [
-  {
-    src: "/images/latest-work/bbva-1.png",
-    alt: "BBVA — selects de producto en collages",
-    ...lolotecSlideSize,
-  },
-];
-
 const tramaSlides: readonly WorkSlide[] = [
   {
     src: "/images/latest-work/trama-1.png",
@@ -104,6 +96,5 @@ export const latestWork = {
     { name: "Indurama", year: "2026", slides: induramaSlides },
     { name: "Trama", year: "2026", slides: tramaSlides },
     { name: "Oquea", year: "2025", slides: oqueaSlides },
-    { name: "BBVA", year: "2025", slides: bbvaSlides },
   ] satisfies readonly WorkProject[],
 } as const;

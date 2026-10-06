@@ -4,25 +4,54 @@
    Hex values from docs/design-system.md live only here. */
 
 :root {
-  /* Color — shell */
-  --background: #ffffff;
-  --foreground: #131417;
-  --muted: #f5f5f5;
-  /* #6b6b6c — darkened from #828283 to clear 4.5:1 AA contrast on light
-     surfaces (background/muted/panel) at small text sizes. */
-  --muted-foreground: #6b6b6c;
-  --panel: #fafafa;
-  /* #6b6c6f — darkened from #9fa0a3 for the same reason (small labels
-     on light surfaces, e.g. BrandMark tagline). */
-  --label: #6b6c6f;
-  --primary: #23120b;
-  --primary-foreground: #ffffff;
+  /* Color scale — same tokens as Figma collection "Albert".
+     Use via Tailwind: bg-neutral-50, text-primary-900, border-neutral-200,
+     ring-primary-800, fill-neutral-900, stroke-neutral-300, shadow-neutral-900/20. */
+  --white: #ffffff;
+  --black: #000000;
+  --glass: rgb(255 255 255 / 0.5);
+
+  --neutral-50: #fafafa;
+  --neutral-100: #f5f5f5;
+  --neutral-200: #e8e8e9;
+  --neutral-300: #d0d0d1;
+  --neutral-400: #9fa0a3;
+  --neutral-500: #6b6b6c;
+  --neutral-600: #525354;
+  --neutral-700: #3a3b3d;
+  --neutral-800: #202124;
+  --neutral-900: #131417;
+  --neutral-950: #020507;
+
+  --primary-50: #f8f4f2;
+  --primary-100: #efe8e4;
+  --primary-200: #dfd1c9;
+  --primary-300: #c7b0a4;
+  --primary-400: #a88878;
+  --primary-500: #8a6758;
+  --primary-600: #6e4e41;
+  --primary-700: #52382f;
+  --primary-800: #3a241c;
+  --primary-900: #23120b;
+  --primary-950: #160b07;
+
+  --shadow: rgb(0 0 0 / 0.15);
+
+  /* Color — shell (aliases onto the scale) */
+  --background: var(--white);
+  --foreground: var(--neutral-900);
+  --muted: var(--neutral-100);
+  --muted-foreground: var(--neutral-500);
+  --panel: var(--neutral-50);
+  --label: var(--neutral-400);
+  --primary: var(--primary-900);
+  --primary-foreground: var(--white);
   --footer: var(--primary);
   --footer-foreground: var(--primary-foreground);
-  --nav-track: #f5f5f5;
-  --nav-active: #131417;
-  --nav-active-foreground: #ffffff;
-  --accent: #131417;
+  --nav-track: var(--neutral-100);
+  --nav-active: var(--neutral-900);
+  --nav-active-foreground: var(--white);
+  --accent: var(--neutral-900);
   --border: rgb(19 20 23 / 0.08);
 
   /* Space — base 4px (docs/design-system.md) */
@@ -53,7 +82,35 @@
 }
 
 @theme inline {
-  /* Colors → bg-*, text-*, border-* */
+  /* Colors → bg-*, text-*, border-*, ring-*, fill-*, stroke-*, shadow-* */
+  --color-white: var(--white);
+  --color-black: var(--black);
+  --color-glass: var(--glass);
+
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+  --color-neutral-950: var(--neutral-950);
+
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-primary-950: var(--primary-950);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
@@ -108,6 +165,14 @@
   --text-body-sm--line-height: 1.55;
   --text-meta: var(--size-meta);
   --text-meta--line-height: 1.4;
+
+  --animate-hero-marquee: hero-marquee 40s linear infinite;
+}
+
+@keyframes hero-marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 /* Breakpoints — 3 tiers, Tailwind defaults (no custom screens):
@@ -127,6 +192,10 @@ html {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .animate-hero-marquee {
+    animation: none;
   }
 }
 
