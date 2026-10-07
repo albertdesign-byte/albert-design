@@ -166,7 +166,7 @@
   --text-meta: var(--size-meta);
   --text-meta--line-height: 1.4;
 
-  --animate-hero-marquee: hero-marquee 40s linear infinite;
+  --animate-hero-marquee: hero-marquee 120s linear infinite;
 }
 
 @keyframes hero-marquee {

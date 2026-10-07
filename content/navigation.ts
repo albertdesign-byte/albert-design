@@ -4,6 +4,7 @@ export const navItems = [
   // Hidden for now — restore when the about section is ready.
   // { label: "Nosotros", href: "/#about" },
   { label: "Cotizame", href: "/contacto" },
+  { label: "Galería", href: "/galeria" },
 ] as const;
 
 export type ServiceIconName =

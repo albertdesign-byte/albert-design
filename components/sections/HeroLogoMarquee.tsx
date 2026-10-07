@@ -3,6 +3,9 @@ import Image from "next/image";
 import { hero } from "@/content/hero";
 import { cn } from "@/lib/cn";
 
+/** Repeats per track so one cycle is always wider than the viewport. */
+const TRACK_COPIES = 3;
+
 function LogoTrack({
   ariaHidden,
   className,
@@ -10,6 +13,10 @@ function LogoTrack({
   ariaHidden?: boolean;
   className?: string;
 }) {
+  const items = Array.from({ length: TRACK_COPIES }, (_, copy) =>
+    hero.logos.map((logo) => ({ logo, copy })),
+  ).flat();
+
   return (
     <ul
       aria-hidden={ariaHidden || undefined}
@@ -18,11 +25,14 @@ function LogoTrack({
         className,
       )}
     >
-      {hero.logos.map((logo) => (
-        <li key={logo.name} className="flex h-[31px] shrink-0 items-center">
+      {items.map(({ logo, copy }) => (
+        <li
+          key={`${copy}-${logo.name}`}
+          className="flex h-[31px] shrink-0 items-center"
+        >
           <Image
             src={logo.src}
-            alt={ariaHidden ? "" : logo.name}
+            alt={ariaHidden || copy > 0 ? "" : logo.name}
             width={logo.width}
             height={logo.height}
             unoptimized
@@ -37,7 +47,8 @@ function LogoTrack({
 /**
  * Hero client strip (Figma 1:587 / 201:8977).
  * Edge fades match rectangles 201:9061 (246px, rotated) and 201:9060 (222px).
- * Two identical tracks translate -50% for a seamless loop.
+ * Each track repeats the set until it is wider than the viewport; two
+ * tracks translate -50% so the next copy is already on-screen at wrap.
  */
 export function HeroLogoMarquee() {
   return (
